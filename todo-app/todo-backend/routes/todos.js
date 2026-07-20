@@ -3,10 +3,10 @@ const { Todo } = require('../mongo')
 const router = express.Router();
 
 /* GET todos listing. */
-router.get('/', async (_, res) => {
-  const todos = await Todo.find({})
-  res.send(todos);
-});
+singleRouter.get('/', async (req, res) => {
+  if (!req.todo) return res.sendStatus(404)
+  res.send(req.todo)
+})
 
 /* POST todo to listing. */
 router.post('/', async (req, res) => {
@@ -40,8 +40,14 @@ singleRouter.get('/', async (req, res) => {
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
-});
+  const { text, done } = req.body
+
+  if (text !== undefined) req.todo.text = text
+  if (done !== undefined) req.todo.done = done
+
+  await req.todo.save()
+  res.send(req.todo)
+})
 
 router.use('/:id', findByIdMiddleware, singleRouter)
 
