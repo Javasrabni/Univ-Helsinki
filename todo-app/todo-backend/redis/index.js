@@ -1,32 +1,28 @@
-const redis = require('redis')
-const { REDIS_URL } = require('../util/config')
+const redis = require('redis');
 
-let set
-let get
+const REDIS_URL = process.env.REDIS_URL || undefined;
 
-if (!REDIS_URL) {
-  const redisIsDisabled = () => {
-    console.log('No REDIS_URL set, Redis is disabled')
-    return null
-  }
-  set = redisIsDisabled
-  get = redisIsDisabled
-} else {
-  let client = redis.createClient({
+let getAsync;
+let setAsync;
+
+if (REDIS_URL) {
+  const client = redis.createClient({
     url: REDIS_URL
-  })
+  });
 
-  client.on('error', (err) => console.log('Redis Client Error', err))
-  
-  client.connect().then(() => {
-    console.log('Connected to Redis')
-  })
-    
-  get = (...args) => client.get(...args)
-  set = (...args) => client.set(...args)
+  // Wajib connect di v4
+  client.connect();
+
+  // Langsung bind, JANGAN pakai promisify karena di v4 sudah otomatis async
+  getAsync = client.get.bind(client);
+  setAsync = client.set.bind(client);
+} else {
+  getAsync = async () => null;
+  setAsync = async () => null;
 }
 
 module.exports = {
-  get,
-  set,
-}
+  getAsync,
+  setAsync
+};
+
