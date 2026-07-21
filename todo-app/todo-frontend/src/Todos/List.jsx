@@ -1,7 +1,10 @@
-import React from 'react'
+	import React from 'react'
 import Todo from './Todo'
 
-const TodoList = ({ todos, deleteTodo, completeTodo }) => {
+const TodoList = ({ todos = [], deleteTodo, completeTodo }) => {
+if (!Array.isArray(todos)) {
+    return <p>Loading or error fetching todos</p>
+  }
   return (
     <>
       {todos.map(todo => (

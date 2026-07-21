@@ -1,3 +1,8 @@
+mongo_data/
+redis_data/
+dist/
+nodemon
+todo-express-backend@0.0.0
 node_modules/
 .env
 
