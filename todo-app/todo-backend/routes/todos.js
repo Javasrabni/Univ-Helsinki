@@ -41,13 +41,17 @@ singleRouter.get('/', async (req, res) => {
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  const { text, done } = req.body;
-
-  if (text !== undefined) req.todo.text = text;
-  if (done !== undefined) req.todo.done = done;
-
+  req.todo.text = req.body.text;
+  req.todo.done = req.body.done;
+  
   await req.todo.save();
   res.send(req.todo);
+});
+
+/* DELETE todo. */
+singleRouter.delete('/', async (req, res) => {
+  await req.todo.deleteOne();
+  res.sendStatus(200);
 });
 
 router.use('/:id', singleRouter);
