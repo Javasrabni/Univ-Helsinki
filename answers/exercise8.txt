@@ -1,0 +1,19 @@
+tn-stalber@Patheigenx:~/Desktop/Helsinki/fs-containers$ sudo docker exec -it mongo mongosh
+test> use the_database
+switched to db the_database
+the_database> show collections
+todos
+the_database> db.todos.insertOne({ text: "Tambahkan jumlah alat di sabuk perkakas saya", done: false })
+{
+  acknowledged: true,
+  insertedId: ObjectId("669ce123456789abcdef0123")
+}
+the_database> db.todos.find({})
+[
+  {
+    _id: ObjectId("669ce123456789abcdef0123"),
+    text: 'Tambahkan jumlah alat di sabuk perkakas saya',
+    done: false
+  }
+]
+the_database> exit
